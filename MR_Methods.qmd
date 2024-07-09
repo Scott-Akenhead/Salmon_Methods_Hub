@@ -1,0 +1,84 @@
+---
+title: "MR Schema and API Contents"
+author: "Scott Akenhead"
+date: "2023-03-12"
+format: pdf
+editor: visual
+---
+
+## Schema for MonitoringResource.org
+
+![Figure 1. MR schema as derived without access to RDBMS schema.](data/testGraphML.png)
+
+## Summaries of Tables Via API MonitoringResource.org
+
+via API at https://mrv1.docs.apiary.io/#introduction/contact-information: \
+Protocol, Method Design, Site, Program Project , Study Design, Study Design Web References Data Repository, Users, Exchange
+
++-----------------------------+-------------------------------------------------------------+-------------------------------------------+
+| Name                        | API                                                         | Saved                                     |
++=============================+=============================================================+===========================================+
+| Protocol                    | https://**www.monitoringresources.org**/api/v1/protocols    | protocols.csv\                            |
+|                             |                                                             | protocols.Rdata                           |
++-----------------------------+-------------------------------------------------------------+-------------------------------------------+
+| Method                      | https://**www.monitoringresources.org**/api/v1/methods      | methods.csv\                              |
+|                             |                                                             | methods.Rdata                             |
++-----------------------------+-------------------------------------------------------------+-------------------------------------------+
+| Design                      | https://**www.monitoringresources.org**/api/v1/designs      | designs.csv\                              |
+|                             |                                                             | designs.Rdata                             |
++-----------------------------+-------------------------------------------------------------+-------------------------------------------+
+| Site                        | *(not implemented)*                                         |                                           |
++-----------------------------+-------------------------------------------------------------+-------------------------------------------+
+| Program                     | https://**www.monitoringresources.org**/api/v1/programs     | programs.csv                              |
+|                             |                                                             | programs.Rdata                            |
++-----------------------------+-------------------------------------------------------------+-------------------------------------------+
+| Project                     | https://**www.monitoringresources.org**/api/v1/projects\    |                                           |
+|                             | (response is 404)                                           |                                           |
++-----------------------------+-------------------------------------------------------------+-------------------------------------------+
+| Study Design                | https://**www.monitoringresources.org**/api/v1/studydesigns | studydesigns.csv studydesigns.Rdata       |
++-----------------------------+-------------------------------------------------------------+-------------------------------------------+
+| Study Design Web References | *(requires parameter: websystemservice= )*                  |                                           |
++-----------------------------+-------------------------------------------------------------+-------------------------------------------+
+| Data Repository             | https://**www.monitoringresources.org**/api/v1/repositories | repositories.csv repositories.Rdata       |
++-----------------------------+-------------------------------------------------------------+-------------------------------------------+
+| Users                       | (offers colleagues for specified user)                      |                                           |
++-----------------------------+-------------------------------------------------------------+-------------------------------------------+
+| Exchange                    | (only dce)                                                  |                                           |
++-----------------------------+-------------------------------------------------------------+-------------------------------------------+
+| Data Collection Events      | https://**www.monitoringresources.org**/exchange/dce\       | dce.Rdata                                 |
+|                             | -- notice change in url.                                    |                                           |
++-----------------------------+-------------------------------------------------------------+-------------------------------------------+
+
+: Table 1. API Entries from MR
+
+```{r setup}
+library(jsonlite); library(magrittr)
+setwd("~/Documents/Projects/DFO 2023 Tom Bird/Monitoring Resources")
+```
+
+## Read Methods as JSON, Write as Rdata and CSV
+
+```{r read1}
+#
+apiObject <- c('protocols', 'methods', 'designs','programs','dce', 'studydesigns','repositories', 'protocols')
+# obj <- 'protocols'  # test w ith one
+for (obj in apiObject){
+    cat('\n -- ', obj, '--\n')
+
+    api_name  <- paste0('http://www.monitoringresources.org/api/v1/',obj) # API URL
+    if (obj =='dce') api_name='https://www.monitoringresources.org/exchange/dce'
+    rds_name  <- paste0('data/', obj,'.Rdata')
+    csv_name  <- paste0('data/', obj,'.csv')
+    
+    a <- fromJSON( api_name)
+    cat(obj, dim(a), colnames(a), '\n')
+    j <- dim(a)[1] %>% sample(size=10) %>% sort # pick random rows
+    print(a[j, ])
+    
+    saveRDS(a, rds_name)
+    if (obj =='dce') next 
+    write.csv(a, csv_name)
+}
+list.files('data')
+
+```
