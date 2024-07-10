@@ -3,42 +3,45 @@ The new perspective on salmon populations – required to address ecosystem base
 
 **The problem** is dataset interoperability (required to be FAIR). Without knowing the exact methods used to collect and process datasets, haphazard data integration will produce mistakes. This exact understanding of methods can only be achieved through transparent descriptions of what each method aims to achieve and how the resulting data should be interpreted.
 
-**The solution** requires building a shared and machine accessible framework for discovering, standardizing, and managing the methods metadata for salmon datasets. This project delivers the tools and processes for this via collaboration between DFO, USGS (PNAMP), and PSMFC. Specifically, this project leverages (a) investments and experience behind the 1,359 rich descriptions of methods available in MonitoringResources.org and (b) design and technology for metadata management of Atlantic salmon datasets: the salmon ecosystem data hub,  SALHUB.
+**The solution** requires building a shared and machine accessible framework for discovering, standardizing, and managing the methods metadata for salmon datasets. This project delivers the tools and processes for this via collaboration between DFO, USGS (PNAMP), and PSMFC. Specifically, this project leverages (a) investments and experience behind the 1,396 rich descriptions of methods available in MonitoringResources.org and (b) design and technology for metadata management of Atlantic salmon datasets: the salmon ecosystem data hub,  SALHUB.
 # 2. Process
-Collaboration, _please._ [Claude 3.5](claude.ai) suggested the following steps, systematic and automated, as an approach. This process likely to evolve.
+Collaboration, _please._  
+[Claude 3.5](claude.ai) suggested the following steps, systematic and automated, as an approach. This process likely to evolve.
 
 1. Data Preparation:
    - Ensure all 1,396 Method descriptions are in a consistent format, ideally plain text.
    - Organize them into a single corpus or database.
-   - Quarto and R to extract, clean, compile as Google Sheet.
+   - Quarto and R to extract, clean, compile as strings vector. 
 
-2. Automated Key Phrase Extraction:
+2.  Key Phrase Extraction:
    - Use Natural Language Processing (NLP) to extract key phrases.
-   - (me starting with R code does not preclude Python: NLTK, spaCy, BERT,.)
+   - (R in Quarto does not preclude Python: NLTK, spaCy, BERT,.)
    - Focus on noun phrases, as these are likely to represent important concepts.
 
 3. Frequency Analysis:
    - Analyze the frequency of extracted phrases across all descriptions.
-   - This will help identify the most common and potentially most important concepts.
-   - A separate, parallel, project is applying AI based clustering of methods to derive important phrases.
-     - That is top-down, this is bottom-up.
+   - Identifying the most common phrases will help identify the most important concepts.
+   - Fisheries and Oceans Canada has a parallel project: AI-derived clusters of methods to derive important phrases.
 
 4. Domain-Specific Dictionary:
    - Create a dictionary of environmental science terms to improve accuracy.
    - This could be based on existing environmental science glossaries or taxonomies.
-   - Current vague plan is automated ontology FROM methods (step 5), then human edits (step 6), then use that to improve automated ontology.
+   - Current (vague) plan is automated ontology FROM methods (step 5), then human edits (step 6), then loop (step 4) to improve automated ontology.
 
-5. Hierarchical Clustering:
-   - Use techniques like hierarchical agglomerative clustering to group similar terms.
+5.  Clustering:
+   - Try [hierarchical agglomerative clustering](https://en.wikipedia.org/wiki/Hierarchical_clustering) to group similar terms.
    - This can help in forming the initial structure of the ontology.
 
 6. Ontology Construction:
-   - Start with high-level categories based on the main areas of environmental science (e.g., ecology, hydrology, atmospheric science).
-   - Use the clustered terms to populate these categories and create subcategories.
+   - Start with high-level categories, main areas of environmental science:ecology, hydrology, atmospheric science,.
+     - The different view-points, the _facets,_ of our knowledge of salmon? [Multi-faceted classification](https://en.wikipedia.org/wiki/Faceted_classification).  
+   - The clustered terms guide populating these categories; create subcategories.
+   - Consider the drop-lists in a future User Interface: if each parent term has 15 child terms, 4 levels deep, then 15^4 = 50,625 terms. 
 
-7. Relationship Mapping:
-   - Identify relationships between concepts (e.g., "is-a", "part-of", "used-in").
-   - This could be done through co-occurrence analysis or more advanced NLP techniques.
+7. Relationships:
+   - Identify links between concepts: -\[CONTAINS]->, -\[IS_AN_INSTANCE OF]->,.
+   - Consider co-occurrence analysis, or advanced NLP I am unaware of.
+   - End-users will evolve this; implies curators curb chaos.
 
 8. Ontology Refinement; Validation and Iteration:
    - Use ontology editing tools like [Protégé](https://protege.stanford.edu/) to refine and visualize the ontology.
